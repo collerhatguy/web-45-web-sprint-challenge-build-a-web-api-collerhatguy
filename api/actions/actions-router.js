@@ -1,7 +1,8 @@
 // Write your "actions" router here!
 const express = require("express")
 const router = express.Router()
-const { get } = require("./actions-model")
+const { get, insert, update, remove } = require("./actions-model")
+const { validateAction, validateActionId } = require("./actions-middlware")
 
 router.get("/", (req, res, next) => {
     get().then(actions => {
@@ -9,23 +10,28 @@ router.get("/", (req, res, next) => {
     }).catch(next)
 })
 
-router.get("/:id", (req, res, next) => {
-    const { id } = req.params
-    get(id).then(action => {
+router.get("/:id", validateActionId, (req, res) => {
+    res.status(200).json(req.action)
+})
+
+router.post("/", validateAction, (req, res, next) => {
+    insert(req.action).then(action => {
+        res.status(201).json(action)
+    }).catch(next)
+})
+
+router.put("/:id", validateAction, validateActionId, (req, res, next) => {
+    const { params: { id }, action } = req
+    update(id, action).then(action => {
         res.status(200).json(action)
     }).catch(next)
 })
 
-router.post("/", (req, res) => {
-
-})
-
-router.put("/:id", (req, res) => {
-
-})
-
-router.delete("/:id", (req, res) => {
-
+router.delete("/:id", validateActionId, (req, res, next) => {
+    const { params: { id }, action } = req
+    remove(id).then(() => {
+        res.status(200).json(action)
+    }).catch(next)
 })
 
 router.use((err, req, res, next) => {
