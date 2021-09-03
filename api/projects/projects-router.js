@@ -15,14 +15,15 @@ router.get("/:id", validateProjectId, (req, res) => {
 })
 
 router.post("/", validateProject, (req, res, next) => {
-    insert(req.sentProject).then(project => {
+    insert(req.body).then(project => {
         res.status(201).json(project)
     }).catch(next)
 })
 
 router.put("/:id", validateProject, validateProjectId, (req, res, next) => {
-    const { params: { id }, sentProject } = req
-    update(id, sentProject).then(updatedProject => {
+    const { params: { id }, body } = req
+    if (body.completed === undefined) next({ status: 400, message: "oops" })
+    update(id, body).then(updatedProject => {
         res.status(200).json(updatedProject)
     }).catch(next)
 })

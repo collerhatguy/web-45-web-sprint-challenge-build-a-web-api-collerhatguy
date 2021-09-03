@@ -2,9 +2,8 @@
 const { get } = require("./projects-model")
 
 const validateProject = (req, res, next) => {
-    const { id, name, description } = req.body
-    if (!id || !name || !description) next({ status: 400, message: "id, name, and description are requires" })
-    req.sentProject = req.body
+    const { name, description } = req.body
+    if (!name || !description) next({ status: 400, message: "id, name, and description are required" })
     next()
 }
 
