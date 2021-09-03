@@ -31,7 +31,7 @@ router.put("/:id", validateProject, validateProjectId, (req, res, next) => {
 router.delete("/:id", validateProjectId, (req, res, next) => {
     const { id } = req.params
     remove(id).then(() => {
-        res.status(req.project)
+        res.status(200).json(req.project)
     }).catch(next)
 })
 

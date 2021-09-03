@@ -15,14 +15,14 @@ router.get("/:id", validateActionId, (req, res) => {
 })
 
 router.post("/", validateAction, (req, res, next) => {
-    insert(req.action).then(action => {
+    insert(req.body).then(action => {
         res.status(201).json(action)
     }).catch(next)
 })
 
 router.put("/:id", validateAction, validateActionId, (req, res, next) => {
-    const { params: { id }, action } = req
-    update(id, action).then(action => {
+    const { params: { id }, body } = req
+    update(id, body).then(action => {
         res.status(200).json(action)
     }).catch(next)
 })
